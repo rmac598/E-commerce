@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/connection');
-const { databaseVersion } = require('../../../UCF-VIRT-FSF-FT-12-2023-U-LOLC/13-ORM/01-Activities/24-Stu_One-to-Many/Solved/config/connection');
 
 class ProductTag extends Model {}
 
