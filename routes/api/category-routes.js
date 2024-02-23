@@ -47,12 +47,54 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
-  // update a category by its `id` value
+router.put('/:id', async(req, res) => {
+  // update a category by its id value
+  try {
+    const updateCategory = await Category.update({
+      category_name: req.body.category_name
+    },
+    {
+      where: {
+        id: req.params.id
+      }
+    });
+    // sends message if user requests to update ID that does not exist
+    const categoryById = await Category.findByPk(req.params.id, {
+      include: [{ model: Product }]
+    });
+
+    if (!categoryById) {
+      res.status(200).json({message: 'No categories found'});
+      return;
+    };
+
+    res.status(200).json(updateCategory);
+    console.log("Category updated!");
+
+  } catch (err) {
+    res.status(500).json(err);
+  };
 });
 
-router.delete('/:id', (req, res) => {
+
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  try{
+  const delcategory = await Category.destroy({
+    where: {
+      id: req.params.id,
+    },
+  });
+  if (!delcategory){
+    res.status(200).json({message: 'no categories'});
+    return;
+  };
+
+  res.json(delcategory);
+}catch(err){
+  res.status(500).json(err);
+};
 });
+
 
 module.exports = router;
